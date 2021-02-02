@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:hr_management/src/models/employer.dart';
+import 'package:hr_management/src/resources/employees_provider.dart';
+import 'package:hr_management/src/resources/search_provider.dart';
 import 'package:hr_management/src/ui/widgets/employed_card/employer_container.dart';
+import 'package:hr_management/src/ui/widgets/employees_container.dart';
 import 'package:hr_management/src/ui/widgets/search_component.dart';
+import 'package:hr_management/src/ui/widgets/utils/expanded_animated_container.dart';
+import 'package:provider/provider.dart';
 
-List<Employer> defaultEmployers = [
-  Employer(id: 2, name: 'Juanpis Gonzalez',wage: 4500000000, isNew: false),
-  Employer(id: 2, name: 'Pepito Pérez',wage: 1000,isNew: true),
-  Employer(id: 2, name: 'El profesor súper O',wage: 23,isNew: true),
-  Employer(id: 2, name: 'El rano rené',wage: 1, isNew: false),
-  Employer(id: 2, name: 'Carlangas',wage: 123456789, isNew: false),
-  Employer(id: 2, name: 'The viking',wage: 546, isNew: false),
-];
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-class HomePage extends StatelessWidget {
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    Provider.of<EmployeesProvider>(context, listen: false).getEmployeesP();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final employeesProvider = Provider.of<EmployeesProvider>(context);
+    final _searchProvider = Provider.of<SearchProvider>(context);
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -78,13 +87,16 @@ class HomePage extends StatelessWidget {
                       ),
                       color: Colors.white,
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     margin: EdgeInsets.only(top: 235),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(
-                          height: 20,
+                        ExpandedAnimatedContainer(
+                          child: Container(
+                            height: 50,
+                          ),
+                          expanded: _searchProvider.isSearchMode,
                         ),
                         Row(
                           children: [
@@ -93,7 +105,9 @@ class HomePage extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              'Employees (15)',
+                              'Employees ${employeesProvider.countEmployees != 0
+                                  ? "(${employeesProvider.countEmployees})"
+                                  : ''}',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -109,22 +123,17 @@ class HomePage extends StatelessWidget {
                                   Icon(Icons.keyboard_arrow_down),
                                 ],
                               ),
-                              onPressed: () => print(''),
+                              onPressed: ()
+                              {
+                                print('algo');
+                              employeesProvider.getEmployeesPrimary();
+                            },
                             ),
                           ],
                         ),
-                        ListView.separated(
-                          padding: EdgeInsets.zero,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => EmployerContainer(
-                            employer: defaultEmployers[index],
-                          ),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 10,
-                          ),
-                          itemCount: defaultEmployers.length,
-                          shrinkWrap: true,
-                        ),
+                        EmployeesContainerList(
+                          employees: employeesProvider.employees,
+                        )
                       ],
                     ),
                   ),
@@ -138,5 +147,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-
