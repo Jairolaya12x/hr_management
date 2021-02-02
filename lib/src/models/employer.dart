@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 
-class Employe {
+class Employer {
   int id;
   String name;
   double wage;
-  List<Employe> employees;
+  List<Employer> employees;
   bool isNew;
 
-  Employe({
+  Employer({
     @required this.id,
     @required this.name,
     this.wage,
@@ -15,19 +15,19 @@ class Employe {
     this.isNew,
   });
 
-  Employe.fromJson(Map<String, dynamic> json) {
+  Employer.fromJson(Map<String, dynamic> json) {
     id        = json['id'];
     name      = json['name'];
     wage      = json['wage'] ??= 0;
-    employees = List.from(json['employes'].map((e) => Employe.fromJson(e)));
+    employees = List.from(json['employes'].map((e) => Employer.fromJson(e)));
     isNew     = json['isNew'];
   }
 
   Map<String, dynamic> toJson() => {
-    'id'      : id,
-    'name'    : name,
-    'wage'    : wage,
-    'employes': employees,
-    'isNew'   : isNew,
+    'id'        : id,
+    'name'      : name,
+    'wage'      : wage,
+    'employees' : employees,
+    'isNew'     : isNew,
   };
 }
