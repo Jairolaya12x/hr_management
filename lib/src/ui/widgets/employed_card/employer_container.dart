@@ -7,13 +7,13 @@ import 'package:hr_management/src/models/employer.dart';
 const List<Color> defaultColors = [
   Colors.purple,
   Colors.redAccent,
-  Colors.yellow,
+  Colors.cyan,
   Colors.green,
   Colors.blueAccent,
 ];
 
 class EmployerContainer extends StatelessWidget {
-  EmployerContainer({@required this.employer});
+  EmployerContainer({@required this.employer,Key key}) : super(key: key);
 
   final Employer employer;
 
@@ -22,7 +22,6 @@ class EmployerContainer extends StatelessWidget {
     return Container(
       height: 70,
       decoration: BoxDecoration(
-        //color: Color(0xff2d3e50),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
@@ -42,7 +41,7 @@ class EmployerContainer extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: defaultColors[Random().nextInt(5)],
+                color: defaultColors[((employer.id % 10) / 2).floor()],
               ),
               child: Container(
                 margin: EdgeInsets.all(
@@ -66,28 +65,28 @@ class EmployerContainer extends StatelessWidget {
               margin: EdgeInsets.all(5),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                employer.name,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'CTO',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text('\$ ${employer.wage}'),
-            ],
-          ),
           Expanded(
-            child: Container(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  employer.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  employer.position ??= '',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text('\$ ${employer.wage}'),
+              ],
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -102,7 +101,7 @@ class EmployerContainer extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    '4',
+                    '${employer.employees.length ??= 0}',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],

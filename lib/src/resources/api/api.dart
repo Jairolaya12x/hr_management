@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:hr_management/src/resources/api/api_exception.dart';
 
-const String host = '';
+const String host = 'raw.githubusercontent.com';
 const Duration timeOut = const Duration(seconds: 10);
 
 class API {

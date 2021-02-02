@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hr_management/src/resources/employees_provider.dart';
+import 'package:hr_management/src/resources/search_provider.dart';
 
 import 'package:hr_management/src/ui/widgets/utils/expanded_animated_container.dart';
+import 'package:provider/provider.dart';
 
 class SearchComponent extends StatefulWidget {
   @override
@@ -9,15 +12,13 @@ class SearchComponent extends StatefulWidget {
 
 class _SearchComponentState extends State<SearchComponent> {
   final _focusNode = FocusNode();
-  bool showPanel = false;
+  SearchProvider _searchProvider;
 
   @override
   void initState() {
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
-        setState(() {
-          showPanel = true;
-        });
+          _searchProvider.isSearchMode = true;
       }
     });
     super.initState();
@@ -25,6 +26,7 @@ class _SearchComponentState extends State<SearchComponent> {
 
   @override
   Widget build(BuildContext context) {
+    _searchProvider = Provider.of<SearchProvider>(context);
     return AnimatedContainer(
       duration: Duration(milliseconds: 750),
       alignment: Alignment.center,
@@ -52,7 +54,7 @@ class _SearchComponentState extends State<SearchComponent> {
               children: [
                 Expanded(
                   child: TextField(
-                    onSubmitted: (_) => setState(() => showPanel = false),
+                    onSubmitted: (_) => _searchProvider.isSearchMode = false,
                     focusNode: _focusNode,
                     decoration: InputDecoration(
                       border: InputBorder.none,
@@ -68,7 +70,7 @@ class _SearchComponentState extends State<SearchComponent> {
               ],
             ),
             ExpandedAnimatedContainer(
-              expanded: showPanel,
+              expanded: _searchProvider.isSearchMode,
               child: Column(
                 children: [
                   Divider(
