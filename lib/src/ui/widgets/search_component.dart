@@ -11,22 +11,26 @@ class SearchComponent extends StatefulWidget {
 }
 
 class _SearchComponentState extends State<SearchComponent> {
-  final _focusNode = FocusNode();
   SearchProvider _searchProvider;
+  EmployeesProvider _employeesProvider;
 
   @override
   void initState() {
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-          _searchProvider.isSearchMode = true;
-      }
-    });
+    Future(
+      () async {
+        await Future.delayed(
+          Duration(seconds: 1),
+        );
+        _searchProvider.isSearchMode = true;
+      },
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     _searchProvider = Provider.of<SearchProvider>(context);
+    _employeesProvider = Provider.of<EmployeesProvider>(context);
     return AnimatedContainer(
       duration: Duration(milliseconds: 750),
       alignment: Alignment.center,
@@ -54,8 +58,7 @@ class _SearchComponentState extends State<SearchComponent> {
               children: [
                 Expanded(
                   child: TextField(
-                    onSubmitted: (_) => _searchProvider.isSearchMode = false,
-                    focusNode: _focusNode,
+                    onChanged: (value) => _employeesProvider.query = value,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(
@@ -76,30 +79,55 @@ class _SearchComponentState extends State<SearchComponent> {
                   Divider(
                     color: Colors.black54,
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                    decoration: BoxDecoration(
-                      color: Color(0xffED6A5A),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.timelapse,
-                          color: Colors.white,
+                  Row(
+                    children: [
+                      Text(
+                        'Filters:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Recents',
-                          style: TextStyle(
-                            color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () => _employeesProvider.recentsFilter =
+                            !_employeesProvider.recentsFilter,
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 450),
+                          curve: Curves.easeInOutQuart,
+                          alignment: Alignment.center,
+                          height: 30,
+                          padding:
+                              EdgeInsets.symmetric(vertical: 0, horizontal: 7),
+                          decoration: BoxDecoration(
+                            color: _employeesProvider.recentsFilter
+                                ? Color(0xffED6A5A)
+                                : Colors.black38,
+                            borderRadius: BorderRadius.circular(
+                                _employeesProvider.recentsFilter ? 15 : 10),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.timelapse,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                'Recents',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -108,11 +136,5 @@ class _SearchComponentState extends State<SearchComponent> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _focusNode?.dispose();
-    super.dispose();
   }
 }
