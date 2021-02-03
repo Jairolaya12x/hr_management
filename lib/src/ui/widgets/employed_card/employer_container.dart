@@ -20,7 +20,7 @@ class EmployerContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: 80,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -62,7 +62,7 @@ class EmployerContainer extends StatelessWidget {
                   ),
                 ),
               ),
-              margin: EdgeInsets.all(5),
+              margin: EdgeInsets.symmetric(vertical: 10,horizontal: 5),
             ),
           ),
           Expanded(

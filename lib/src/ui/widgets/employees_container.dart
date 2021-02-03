@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:hr_management/src/models/employer.dart';
+import 'package:hr_management/src/resources/employees_provider.dart';
 import 'package:hr_management/src/ui/widgets/employed_card/employer_container.dart';
+import 'package:provider/provider.dart';
 
 class EmployeesContainerList extends StatelessWidget {
-  EmployeesContainerList({@required this.employees});
-
-  final List<Employer> employees;
 
   @override
   Widget build(BuildContext context) {
-    if(employees == null) return CircularProgressIndicator();
-    else if(employees.isEmpty) return Text('No employees found');
+    final employeesProvider = Provider.of<EmployeesProvider>(context);
+    if(employeesProvider.status == EmployeesProviderStatus.loading) return CircularProgressIndicator();
+    else if(employeesProvider.status == EmployeesProviderStatus.empty) return Text('No employees found');
     return ListView.separated(
-      itemBuilder: (_, index) => EmployerContainer(employer: employees[index],key: ValueKey(employees[index].id),),
+      itemBuilder: (_, index) => EmployerContainer(employer: employeesProvider.employees[index]),
       separatorBuilder: (_, index) => SizedBox(
         height: 10,
       ),
-      itemCount: employees.length,
+      itemCount: employeesProvider.employees.length,
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.zero,

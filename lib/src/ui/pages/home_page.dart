@@ -5,6 +5,7 @@ import 'package:hr_management/src/resources/search_provider.dart';
 import 'package:hr_management/src/ui/widgets/employed_card/employer_container.dart';
 import 'package:hr_management/src/ui/widgets/employees_container.dart';
 import 'package:hr_management/src/ui/widgets/search_component.dart';
+import 'package:hr_management/src/ui/widgets/shortButton.dart';
 import 'package:hr_management/src/ui/widgets/utils/expanded_animated_container.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    Provider.of<EmployeesProvider>(context, listen: false).getEmployeesP();
+    Provider.of<EmployeesProvider>(context, listen: false).getEmployees();
     super.initState();
   }
 
@@ -115,25 +116,10 @@ class _HomePageState extends State<HomePage> {
                               child: Container(),
                             ),
                             Text('Order by:'),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: Row(
-                                children: [
-                                  Icon(Icons.attach_money_outlined),
-                                  Icon(Icons.keyboard_arrow_down),
-                                ],
-                              ),
-                              onPressed: ()
-                              {
-                                print('algo');
-                              employeesProvider.getEmployeesPrimary();
-                            },
-                            ),
+                            ShortButton(),
                           ],
                         ),
-                        EmployeesContainerList(
-                          employees: employeesProvider.employees,
-                        )
+                        EmployeesContainerList()
                       ],
                     ),
                   ),
