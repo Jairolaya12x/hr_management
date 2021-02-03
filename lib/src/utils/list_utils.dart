@@ -21,5 +21,12 @@ class ListUtils {
     }
     return tl;
   }
+
+  static E findElement<E>(bool match(E element), List list) {
+    for (E item in list) {
+      if(match(item)) return item;
+    }
+    return null;
+  }
 }
 

@@ -43,7 +43,7 @@ class API {
         statusCode: response.statusCode,
       );
     }
-    //Return respone
+    //Return response
     return decodedBody;
   }
 }

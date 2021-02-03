@@ -55,7 +55,7 @@ class EmployeesProvider extends ChangeNotifier {
     List<Employer> result;
     result = ListUtils.filterList(
           (element) => element.isNew,
-      _employees,
+      _query.length > 1 ? employees : _employees,
     );
     employees = result;
   }
@@ -105,6 +105,15 @@ class EmployeesProvider extends ChangeNotifier {
     }
   }
 
+  List<Employer> getFullEmployees(List<Employer> origin) {
+    final tl = List<Employer>();
+    for (Employer item in origin) {
+      final element = ListUtils.findElement((Employer element) => element.id == item.id, _employees);
+      if(element != null) tl.add(element);
+    }
+    return tl;
+  }
+
   void setOnError() {
     status = EmployeesProviderStatus.empty;
     notifyListeners();
@@ -120,6 +129,11 @@ class EmployeesProvider extends ChangeNotifier {
     status = EmployeesProviderStatus.done;
     employees = value;
     countEmployees = value.length;
+    notifyListeners();
+  }
+
+  void updateEmployerStatus(Employer employer) {
+    employer.isNew = !employer.isNew;
     notifyListeners();
   }
 }

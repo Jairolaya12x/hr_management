@@ -29,12 +29,4 @@ class Employer {
       print(e);
     }
   }
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'wage': wage,
-        'employees': employees,
-        'isNew': isNew,
-      };
 }
